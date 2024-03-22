@@ -265,15 +265,23 @@ def cross_circles_circle(a, b):
         b1 = [x[0] for x in b1]
         return random_merge(a1, b1)
 
+def cross_circles_patch(a, b):
+    l = min(len(a), len(b))
+    ixa = randint(0, l - 2)
+    ixb = randint(ixa, l - 1)
+    return a[:ixa] + b[ixa:ixb] + a[ixb:]
+
+def cross_circles_random(a, b):
+    limit = random()
+    out = [(a[i] if random() > limit else b[i]) for i in range(min(len(a), len(b)))]
+    if len(a) > len(b):
+        out += a[len(b):]
+    return out
+
+cross_circles_strategies = [cross_circles_circle, cross_circles_random, cross_circles_patch]
+
 def cross_circles(a, b):
-    crossing = int(2*random())
-    if crossing == 0:
-        limit = random()
-        out = [(a[i] if random() > limit else b[i]) for i in range(min(len(a), len(b)))]
-        if len(a) > len(b):
-            out += a[len(b):]
-        return out
-    return cross_circles_circle(a, b)
+    return choice(cross_circles_strategies)(a, b)
 
 def next_generation(room):
     (genes, ix) = room
@@ -368,4 +376,4 @@ while True:
             raise Exception(f"Bad isolation strategy {isolation_strategy}")
         print(f"Substituting genes for room {worse}");
         rooms[worse] = (alt_genes, worse)
-        isolated += 1
+        # isolated += 1
