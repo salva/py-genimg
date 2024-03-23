@@ -360,7 +360,7 @@ while True:
 
         best = min([room[0][0] for room in rooms],
                    key = lambda x: x[1])
-        best_img = render_circles_scl(best[0], render_scale * rooms_by_row)
+        best_img = render_circles(best[0], render_scale * rooms_by_row)
         cv2.imwrite("best.jpeg", best_img)
             
     if isolation_strategy == "always":
